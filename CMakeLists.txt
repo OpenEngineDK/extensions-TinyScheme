@@ -1,7 +1,8 @@
 
 # Create the extension library
 ADD_LIBRARY(Extensions_TinyScheme
-  Hello/World.cpp
+  Script/Scheme.cpp
+  Script/Scheme.h
   tinyscheme/dynload.c
   tinyscheme/dynload.h
   tinyscheme/opdefines.h

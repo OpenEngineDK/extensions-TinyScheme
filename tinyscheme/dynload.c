@@ -139,7 +139,8 @@ static void make_init_fn(const char *name, char *init_fn) {
 }
 
 
-
-
-
-
+/*
+Local variables:
+c-file-style: "k&r"
+End:
+*/ 
