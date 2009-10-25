@@ -15,6 +15,7 @@
 #include <Utils/Timer.h>
 
 #include <string>
+#include <map>
 
 extern "C" {
 #include "tinyscheme/scheme.h"
@@ -27,18 +28,29 @@ namespace Script {
     using namespace OpenEngine::Core;
     using namespace OpenEngine::Utils;
 
+    using namespace std;
     
     class Scheme : public IListener<ProcessEventArg> {
         scheme *sc;
         pointer fProcess;
         Timer time;
+        Timer reloadTimer;
+        
+        map<string,time_t> autoFiles;
         
     public:
         Scheme();
         
-        void EvalAndPrint(std::string str);
-        
+        void EvalAndPrint(std::string str);        
         void Handle(ProcessEventArg arg);
+        void AddFileToAutoLoad(string file);
+        
+        void DefinePointer(string name, void* p);
+        
+    private:
+        pointer CbQuit(scheme *s, pointer args);
+        pointer CbTnGetPos(scheme *s, pointer args);
+        pointer CbVecToList(scheme *s, pointer args);
         
     };
         
