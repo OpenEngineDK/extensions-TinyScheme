@@ -46,12 +46,14 @@ namespace Script {
         void AddFileToAutoLoad(string file);
         
         void DefinePointer(string name, void* p);
+        void DefineSbo(string name, sbo s);
         
     private:
         pointer CbQuit(scheme *s, pointer args);
         pointer CbTnGetPos(scheme *s, pointer args);
         pointer CbVecToList(scheme *s, pointer args);
-        
+        pointer CbListToVec(scheme *s, pointer args);
+        pointer CbOECall(scheme *s, pointer args);
     };
         
 }

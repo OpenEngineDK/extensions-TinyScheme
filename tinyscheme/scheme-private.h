@@ -58,7 +58,7 @@ struct cell {
       struct cell *_car;
       struct cell *_cdr;
     } _cons;
-      void* _pointer;
+    sbo _pointer;
   } _object;
 };
 
@@ -172,7 +172,7 @@ int is_character(pointer p);
 long charvalue(pointer p);
 int is_vector(pointer p);
 
-    void* pointervalue(pointer p);
+    sbo sbovalue(pointer p);
     
 int is_port(pointer p);
 

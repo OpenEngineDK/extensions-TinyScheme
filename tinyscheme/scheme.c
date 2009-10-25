@@ -194,7 +194,7 @@ INTERFACE double rvalue(pointer p)    { return (!num_is_integer(p)?(p)->_object.
 #define set_num_integer(p)   (p)->_object._number.is_fixnum=1;
 #define set_num_real(p)      (p)->_object._number.is_fixnum=0;
 INTERFACE  long charvalue(pointer p)  { return ivalue_unchecked(p); }
-INTERFACE void* pointervalue(pointer p) {return ((p)->_object._pointer); }
+INTERFACE void* sbovalue(pointer p) {return ((p)->_object._pointer); }
 
 INTERFACE INLINE int is_port(pointer p)     { return (type(p)==T_PORT); }
 INTERFACE INLINE int is_inport(pointer p)  { return is_port(p) && p->_object._port->kind & port_input; }
@@ -228,7 +228,7 @@ INTERFACE INLINE pointer closure_code(pointer p)   { return car(p); }
 INTERFACE INLINE pointer closure_env(pointer p)    { return cdr(p); }
 
 INTERFACE INLINE int is_continuation(pointer p)    { return (type(p)==T_CONTINUATION); }
-INTERFACE INLINE int is_pointer(pointer p)    { return (type(p)==T_POINTER); }
+INTERFACE INLINE int is_sbo(pointer p)    { return (type(p)==T_POINTER); }
 #define cont_dump(p)     cdr(p)
 
 /* To do: promise should be forced ONCE only */
@@ -950,10 +950,10 @@ INTERFACE pointer mk_integer(scheme *sc, long num) {
   return (x);
 }
 
-INTERFACE pointer mk_pointer(scheme *sc, void* p) {
+INTERFACE pointer mk_sbo(scheme *sc, sbo p) {
     pointer x = get_cell(sc,sc->NIL, sc->NIL);
     
-    typeflag(x) = (T_POINTER);
+    typeflag(x) = (T_POINTER | T_ATOM);
     x->_object._pointer = p;
     
     return (x);
@@ -1337,6 +1337,8 @@ static void finalize_cell(scheme *sc, pointer a) {
       port_close(sc,a,port_input|port_output);
     }
     sc->free(a->_object._port);
+  } else if (is_sbo(a)) {
+      sbo_release(sbovalue(a));      
   }
 }
 
@@ -2005,10 +2007,11 @@ static void atom2str(scheme *sc, pointer l, int f, char **pp, int *plen) {
           snprintf(p,STRBUFFSIZE,"#<FOREIGN PROCEDURE %ld>", procnum(l));
      } else if (is_continuation(l)) {
           p = "#<CONTINUATION>";
-     } else if (is_pointer(l)) {
+     } else if (is_sbo(l)) {
          p = sc->strbuff;
-         snprintf(p,STRBUFFSIZE,"#<POINTER %p>", l);
-     
+         char *str = sbo_desc(sbovalue(l));
+         snprintf(p,STRBUFFSIZE,"#<SBO %s>", str);
+         free(str);
      } else {
           p = "#<ERROR>";
      }
