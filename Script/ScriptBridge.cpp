@@ -64,11 +64,20 @@ namespace OpenEngine {
                 //logger.info << "getpos!" << logger.end;
                 Vector<3,float> pos = node->GetPosition();
                 return ScriptBridge::CreateSboObject<Vector<3,float> >(pos);
-            } else if (fun == "set-position") {
-                
+            } else if (fun == "set-position") {                
                 Vector<3,float>* pos = (Vector<3,float>*)(args[0])->_pointer;
                 node->SetPosition(*pos);
+            } else if (fun == "get-rotation") {
+                Vector<3,float> euler = node->GetRotation().GetEulerAngles();
+                return ScriptBridge::CreateSboObject<Vector<3,float> >(euler);
+            } else if (fun == "set-rotation") {
+                Vector<3,float>* eulerP = (Vector<3,float>*)(args[0])->_pointer;
+                Vector<3,float> euler = *eulerP;
+                float roll=euler[0];
+                float pitch=euler[1];
+                float jaw = euler[2];
                 
+                node->SetRotation(Quaternion<float>(roll,pitch,jaw));
             } else {
                 logger.info << "called " << fun << logger.end;
             }
