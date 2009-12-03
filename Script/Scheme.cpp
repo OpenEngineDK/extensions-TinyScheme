@@ -156,8 +156,17 @@ namespace Script {
         int dt = time.GetElapsedIntervals(1);
         if (time.GetElapsedIntervals(100000)) {
             time.Reset();
-            scheme_call(sc, fProcess, _cons(sc, mk_integer(sc, dt), sc->NIL, 0));
-                    
+
+            //_cons(sc, mk_integer(sc, dt), sc->NIL, 0);
+
+            //scheme_call(sc, fProcess, sc->NIL);
+            ostringstream out;
+            out << "(process " << dt << ")";
+        
+        
+            scheme_load_string(sc, out.str().c_str());
+            //scheme_call(sc, fProcess, _cons(sc, mk_integer(sc, dt), sc->NIL, 0));
+            
             //scheme_apply0(sc, "process");
         }
     }
