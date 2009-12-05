@@ -154,7 +154,7 @@ namespace Script {
         
         
         int dt = time.GetElapsedIntervals(1);
-        if (time.GetElapsedIntervals(100000)) {
+        if (time.GetElapsedIntervals(1000)) {
             time.Reset();
 
             //_cons(sc, mk_integer(sc, dt), sc->NIL, 0);
