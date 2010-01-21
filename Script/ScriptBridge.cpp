@@ -10,7 +10,7 @@
 #include "ScriptBridge.h"
 #include <Logging/Logger.h>
 
-
+#include <cstdio>
 #include <Scene/TransformationNode.h>
 
 
