@@ -13,6 +13,7 @@
 #include <Core/EngineEvents.h>
 #include <Core/IListener.h>
 #include <Utils/Timer.h>
+#include <Utils/DateTime.h>
 
 #include <string>
 #include <map>
@@ -30,19 +31,19 @@ namespace Script {
 
     using namespace std;
     
-    class Scheme : public IListener<ProcessEventArg> {
+    class Scheme : public IListener<Core::ProcessEventArg> {
         scheme *sc;
         pointer fProcess;
         Timer time;
         Timer reloadTimer;
         
-        map<string,time_t> autoFiles;
+        map<string,Utils::DateTime> autoFiles;
         
     public:
         Scheme();
         
         void EvalAndPrint(std::string str);        
-        void Handle(ProcessEventArg arg);
+        void Handle(Core::ProcessEventArg arg);
         void AddFileToAutoLoad(string file);
         
         void DefinePointer(string name, void* p);

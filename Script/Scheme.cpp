@@ -11,7 +11,8 @@
 #include "Scheme.h"
 #include <Logging/Logger.h>
 #include <Resources/DirectoryManager.h>
-#include "boost/filesystem/operations.hpp"
+#include <Resources/File.h>
+//#include "boost/filesystem/operations.hpp"
 #include <Scene/TransformationNode.h>
 #include <Script/ScriptBridge.h>
 
@@ -35,7 +36,7 @@ namespace Script {
 
     using namespace OpenEngine::Resources;
     using namespace OpenEngine::Scene;
-    using namespace boost::filesystem;
+    //using namespace boost::filesystem;
 
     template <class C>class Callback {
     public:
@@ -131,7 +132,7 @@ namespace Script {
         
         scheme_load_file(sc, fh);
         fclose(fh);
-        autoFiles[file] = last_write_time(path);
+        autoFiles[file] = File::GetLastModified(path);
         fProcess = scheme_apply0(sc, "getp");
 
     }
@@ -142,12 +143,12 @@ namespace Script {
             reloadTimer.Reset();
             
             //check files
-            for(map<string,time_t>::iterator itr = autoFiles.begin();
+            for(map<string,DateTime>::iterator itr = autoFiles.begin();
                 itr != autoFiles.end();
                 itr++) {
                 string file = (*itr).first;
                 string path = DirectoryManager::FindFileInPath(file);
-                if (last_write_time(path) != (*itr).second)
+                if (File::GetLastModified(path) != (*itr).second)
                     AddFileToAutoLoad(file);
             }
         }
